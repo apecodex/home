@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 	<meta http-equiv="content-type" content="text/html;charset=utf-8">
+	<link rel="icon" href="img/favicon.ico" type="image/x-icon">
 	<link rel="dns-prefetch" href="/music">
 	<link rel="dns-prefetch" href="https://rookiesmile.github.io">
 	<link rel="dns-prefetch" href="/lab">
@@ -73,7 +74,7 @@
 		function gc(){
 			return '#'+('00000'+(Math.random()*0x1000000<<0).toString(16)).substr(-6);
 		}
-		var data = [['首页','/','#ddd'],['音乐','/music','#ffcdd2'],['博客','https://rookiesmile.github.io','#0eb3af'],['实验室','/lab','#40c4ff'],['code','/code','#ee6e73'],['相册','/album','#bfafa0']];
+		var data = [['首页','/','#ddd'],['音乐','content/404.html','#ffcdd2'],['博客','https://rookiesmile.github.io','#0eb3af'],['番剧推荐','content/404.html','#40c4ff'],['code','content/404.html','#ee6e73'],['相册','content/404.html','#bfafa0']];
 		var max = 12;
 		if(data.length<max){data = data.concat(data);}
 		var mode = '<li style="background:{{background}};transform:rotate({{rotate}}deg)" data-index={{index}}><a href="{{href}}">{{word}}</a></li>',
