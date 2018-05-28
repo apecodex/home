@@ -1,0 +1,495 @@
+<html lang="zh-cmn-Hans">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=no">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <title>Ape Code 的音乐  ...(｡•ˇ‸ˇ•｡) ...</title>
+  <link rel="icon" href="../img/favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="https://cdn.bootcss.com/mdui/0.4.0/css/mdui.min.css">
+  <style>
+    .mdui-appbar-with-toolbar {
+      padding-top: 68px;
+      padding-bottom: 56px;
+    }
+
+    .music-list-wrapper {
+      border-bottom: 1px solid #e2e2e2;
+      padding: 2px 0 0 2px;
+    }
+
+    .music-list-wrapper:nth-child(1) {
+      border-top: 1px solid #e2e2e2;
+      padding: 2px 0 0 2px;
+    }
+
+    .mdui-list-item-content {
+      padding-top: 3px;
+      padding-bottom: 3px;
+    }
+
+    .music-list-item p {
+      margin: 5px;
+    }
+
+    .little-span-1 {
+      border: 1px orange solid;
+      border-radius: 3px;
+      color: orange;
+      padding: 0px 4px;
+      font-size: 11px;
+      margin-left: 7px;
+    }
+
+    .little-span-2 {
+      border: 1px #4e4fb5 solid;
+      border-radius: 3px;
+      color: #4e4fb5;
+      padding: 0px 4px;
+      font-size: 11px;
+      margin-left: 7px;
+    }
+
+    .music-list-item p:nth-child(2) {
+      font-size: 12px;
+      color: #000000;
+      font-weight: 100;
+    }
+
+    .music-list-wrapper i {
+      color: #b5adad;
+      font-weight: 100;
+    }
+
+    .mdui-list-item:hover {
+      background-color: white;
+    }
+
+    .playList-active p {
+      color: #009688!important;
+    }
+
+    .playList-active::before {
+      content: "";
+      position: absolute;
+      left: 0px;
+      background-color: #009688!important;
+      width: 4px;
+      height: 40px;
+    }
+
+    .mvSpan {
+      border-radius: 5px;
+      padding: 3px 5px;
+      font-size: 12px;
+      background-color: #d8d4d4;
+      color: white;
+      margin-right: 11px;
+    }
+
+    @media screen and (min-width: 400px) {
+      #musicPlayer-detail {
+        width: 320px !important;
+      }
+    }
+
+    @media screen and (max-width: 700px) {
+      .PrevAndNext {
+        display: none;
+      }
+    }
+
+    #fatherUl {
+      display: flex;
+      width: 100%;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .childrenLi {
+      flex: 1;
+      text-align: center;
+    }
+
+    .childrenLi i {
+      font-size: 38px;
+    }
+  </style>
+</head>
+
+<body class="mdui-drawer-body-left mdui-appbar-with-toolbar mdui-theme-primary-teal mdui-theme-accent-pink">
+  <header mdui-headroom="options" class="mdui-appbar mdui-appbar-fixed">
+    <div class="mdui-toolbar mdui-color-theme">
+      <span class="mdui-btn mdui-btn-icon mdui-ripple mdui-ripple-white" mdui-drawer="{target: '#main-drawer', swipe: true}">
+        <i class="mdui-icon material-icons">menu</i>
+      </span>
+      <span class="mdui-typo-title">音乐列表   ·   滚来滚去……~(～o￣▽￣)～o 。。。滚来滚去……o～(＿△＿o～) ~。。
+</span>
+      <div class="mdui-toolbar-spacer"></div>
+      <span class="mdui-btn mdui-btn-icon mdui-ripple mdui-ripple-white">
+        <i class="mdui-icon material-icons">&#xe5d4;</i>
+      </span>
+    </div>
+  </header>
+  <div class="mdui-container doc-container doc-no-cover" style="width:100%; padding:0;">
+    <ul id="musicListUl" class="mdui-list music-ul" style="padding:0 5px;"></ul>
+  </div>
+
+  <div id="player-wrapper" class="mdui-list" style="position:fixed;bottom:0;left:0;right:0;padding:0;background-color:white;display:none;z-index:5050;">
+    <div class="mdui-list-item" style="padding:0 10px;">
+      <!-- <div class="mdui-progress" style="position:absolute;top:0;left:0;right:0;height:3px;">
+        <div class="mdui-progress-determinate mini-progress" style="width: 0%;"></div>
+      </div> -->
+      <label id="changeProgress" class="mdui-slider" style="position:absolute;top:0;left:0;right:0;height:3px;">
+        <input onchange="changeProgress()" class="mini-progress" type="range" value="0" step="1" min="0" max="100" />
+      </label>
+      <div class="mdui-list-item-avatar">
+        <img id="musicPlayer-icon" src="https://ws3.sinaimg.cn/large/006tNbRwgy1fokiycw4kdj30dw0dm0te.jpg" />
+      </div>
+      <div style="margin-left: 8px;" class="mdui-list-item-content music-list-item">
+        <p id="musicPlayer-name"></p>
+        <p style="width:160px" class="mdui-text-truncate" id="musicPlayer-detail"></p>
+      </div>
+      <i onclick="PrevAndNext(-1)" class="PrevAndNext mdui-ripple mdui-icon material-icons" style="color:#009688!important; font-size:38px;">&#xe045;</i>
+      <i onclick="playBtn()" id="playBtn" class="mdui-ripple mdui-icon material-icons" style="color:#009688!important; font-size:38px;">&#xe039;
+      </i>
+
+      <div id="play-spinner" style="display:none;margin:5px;" class="mdui-spinner mdui-spinner-colorful"></div>
+
+      <i onclick="PrevAndNext(+1)" class="PrevAndNext mdui-ripple mdui-icon material-icons" style="color:#009688!important; font-size:38px;">&#xe044;</i>
+      <i mdui-dialog="{target: '#music-opts'}" class="mdui-ripple mdui-icon material-icons" style="color:#009688!important; font-size:38px;margin-left:14px;">&#xe03d;</i>
+    </div>
+  </div>
+
+  <div class="mdui-dialog" id="music-opts">
+    <div class="mdui-dialog-content">
+      <div class="mdui-dialog-title">设置</div>
+      <ul id="fatherUl">
+        <li onclick="PrevAndNext(-1)" class="childrenLi mdui-ripple">
+          <i class="mdui-icon material-icons">&#xe045;</i>上一曲</li>
+        <li onclick="PrevAndNext(+1)" class="childrenLi mdui-ripple">下一曲
+          <i class="mdui-icon material-icons">&#xe044;</i>
+        </li>
+      </ul>
+      <p></p>
+      音量：
+      <label style="width:98%;" class="mdui-slider mdui-slider-discrete">
+        <input oninput="changeVolume()" id="changeVolume" value="100" type="range" step="1" min="0" max="100" />
+      </label>
+    </div>
+
+    <div class="mdui-dialog-actions">
+      <button class="mdui-btn mdui-ripple" mdui-dialog-close>关闭</button>
+    </div>
+  </div>
+  <div id="music-MV" style="width:96%;" class="mdui-dialog">
+    <div style="padding:3px; min-height:200px;" class="mdui-dialog-content">
+        <video style="width: 100%;" class="mdui-video-fluid"  src=""  controls="" x5-playsinline="" playsinline="" webkit-playsinline="" poster="" preload="auto" autoplay="autoplay" loop="loop" ></video>
+    </div>
+
+    <div class="mdui-dialog-actions">
+      <button class="mdui-btn mdui-ripple" mdui-dialog-close>关闭</button>
+    </div>
+  </div>
+
+  <div class="mdui-drawer" id="main-drawer">
+    <div class="mdui-list" mdui-collapse="{accordion: true}" style="margin-bottom: 76px;">
+      <p style="text-align:center;">
+        <a target="_blank" href="https://liuyangxiong.cn/home" class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent">回到首页</a>
+      </p>
+    </div>
+  </div>
+  <audio autoplay="autoplay" controls="controls" style='display:none;'></audio>
+  <script src="https://cdn.bootcss.com/jquery/1.11.0/jquery.min.js"></script>
+  <script src="https://cdn.bootcss.com/mdui/0.4.0/js/mdui.min.js"></script>
+  <!-- <script>var $$ = mdui.JQ;</script> -->
+  <script>
+    var json = [{
+      'name': 'Be My Love', 'detail': '2 Man Embassy / Emily Coulston',
+      'link': 'https://music.163.com/song/media/outer/url?id=562598057.mp3', 'icon': 'https://p1.music.126.net/nQ81CuNNZBswq-MqL-BbpQ==/109951163302641977.jpg?param=130y130',
+      'tips': ["独家"], 'mv': ''
+    },
+
+    {
+      'name': 'ハローグッバイ', 'detail': 'シナリオアート',
+      'link': 'https://music.163.com/song/media/outer/url?id=504264555.mp3', 'icon': 'https://p1.music.126.net/mj8HFDJShvU1JpqwZ90LcA==/19050138463134831.jpg?param=130y130',
+      'tips': ["独家"], 'mv': ''
+    },
+    
+    {
+      'name': 'Tokyo', 'detail': 'Truitt / Light House',
+      'link': 'https://music.163.com/song/media/outer/url?id=494388070.mp3', 'icon': 'https://p1.music.126.net/TD1DTn8Bv1ec0HYUSOuEYA==/19229358858445468.jpg?param=130y130',
+      'tips': ["独家"], 'mv': ''
+    },
+
+    {
+      'name': 'Medusa', 'detail': 'Kailee Morgue',
+      'link': 'https://music.163.com/song/media/outer/url?id=512648216.mp3', 'icon': 'https://p1.music.126.net/37IbxfUztAhvttsc6tlcHA==/18853325881510380.jpg?param=130y130',
+      'tips': ["独家"], 'mv': ''
+    },
+
+
+    {
+      'name': 'Microphones ft. Jesse Cochran', 'detail': 'Pyramid Scheme',
+      'link': 'https://music.163.com/song/media/outer/url?id=29544860.mp3', 'icon': 'https://p1.music.126.net/CWrYZA4Hj2-Wq8cb5t__1A==/2535473814805061.jpg?param=130y130',
+      'tips': ["独家"], 'mv': ''
+    },
+      
+    {
+      'name': 'Part Of Me', 'detail': 'Katy Perry',
+      'link': 'https://music.163.com/song/media/outer/url?id=18982022.mp3', 'icon': 'https://p1.music.126.net/CyP5ygzJtXjBH_lNSxC3Mw==/109951163165830806.jpg?param=130y130',
+      'tips': ["独家"], 'mv': ''
+    },
+
+    {
+      'name': 'About', 'detail': 'Beatrich',
+      'link': 'https://music.163.com/song/media/outer/url?id=28563317.mp3', 'icon': 'https://p1.music.126.net/rb5eTiVuweC64tYOJ6GySA==/17778003509925939.jpg?param=130y130',
+      'tips': ["SQ", "独家"], 'mv': ''
+    },
+
+    {
+      'name': 'Superstar', 'detail': 'Beatrich',
+      'link': 'https://music.163.com/song/media/outer/url?id=16961463.mp3', 'icon': 'https://p1.music.126.net/kM-9kKS4YHdO3Vf4rWKS1w==/18195817928623495.jpg?param=130y130',
+      'tips': ["HQ",], 'mv': 'http://music.163.com/#/mv?id=5604201'
+    },
+
+    {
+      'name': 'Rolling In The Deep', 'detail': 'Vazquez Sounds',
+      'link': 'https://music.163.com/song/media/outer/url?id=20671339.mp3', 'icon': 'https://p1.music.126.net/_aojlwkHiFYa36dBb5GN3g==/575044581337780.jpg?param=130y130',
+      'tips': ["HQ",], 'mv': ''
+    },
+
+    {
+      'name': 'I Don\'t Know ', 'detail': '王诗安',
+      'link': 'https://music.163.com/song/media/outer/url?id=424474011.mp3', 'icon': 'https://p1.music.126.net/Sw6oUm7jEL8YU76rPMJl-g==/18716986441276771.jpg?param=130y130',
+      'tips': ["SQ"], 'mv': 'http://music.163.com/#/mv?id=5404075'
+    },
+
+    {
+      'name': 'See You Again', 'detail': 'Wiz Khalifa / Charlie Puth',
+      'link': 'https://music.163.com/song/media/outer/url?id=30953009.mp3', 'icon': 'https://p1.music.126.net/JIc9X91OSH-7fUZqVfQXAQ==/7731765766799133.jpg?param=130y130',
+      'tips': ["SQ"], 'mv': 'http://music.163.com/#/mv?id=393006'
+    },
+
+    {
+      'name': 'All Night', 'detail': 'Icona Pop',
+      'link': 'https://music.163.com/song/media/outer/url?id=27731057.mp3', 'icon': 'https://p1.music.126.net/YGhKfTN9RbHTuWubMQkrag==/6642149744061259.jpg?param=130y130',
+      'tips': ["SQ"], 'mv': ''
+    },
+
+
+    {
+      'name': 'Long Shot', 'detail': 'Trademark / Cash Cash / Clean Bandit / The Chainsmokers / Jess Glynne / SirenXX',
+      'link': 'https://music.163.com/song/media/outer/url?id=422977912.mp3', 'icon': 'https://p1.music.126.net/qIxzy72gfu1884TRJFbHoA==/3441471401743562.jpg?param=130y130',
+      'tips': ["SQ"], 'mv': ''
+    },
+
+    {
+      'name': 'ALIVE', 'detail': 'RAM WIRE',
+      'link': 'httpss://music.163.com/song/media/outer/url?id=22727893.mp3', 'icon': 'https://p1.music.126.net/xBoi6aewRckKLqBE92Vuhw==/912594651077819.jpg?param=130y130',
+      'tips': ["HQ", ], 'mv': ''
+    },
+    
+    {
+      'name': '骄傲的少年', 'detail': '南征北战',
+      'link': 'https://music.163.com/song/media/outer/url?id=408332757.mp3', 'icon': 'https://p1.music.126.net/Brn39jwEDNPVV6pNWcv_rA==/1391981724588577.jpg?param=130y130',
+      'tips': ["SQ"], 'mv': ''
+    },
+
+
+    {
+      'name': 'I Like It Like That', 'detail': 'Hot Chelle Rae',
+      'link': 'https://music.163.com/song/media/outer/url?id=4109368.mp3', 'icon': 'https://p1.music.126.net/TSt971y0Mcutnrx451xmsQ==/2544269908121050.jpg?param=130y130',
+      'tips': ["SQ"], 'mv': ''
+    },
+
+    {
+      'name': 'I Love It', 'detail': 'Icona Pop / Charli XCX',
+      'link': 'https://music.163.com/song/media/outer/url?id=4128666.mp3', 'icon': 'https://p1.music.126.net/OxrSnYW9QNjc9hk6m5OIlA==/109951163203105950.jpg?param=130y130',
+      'tips': [], 'mv': ''
+    },
+    
+    {
+      'name': 'Kanye', 'detail': 'The Chainsmokers / SirenXX',
+      'link': 'https://music.163.com/song/media/outer/url?id=28883411.mp3', 'icon': 'https://p1.music.126.net/wFm9VWxmdLZR_H98pwfROQ==/8910442231527357.jpg?param=130y130',
+      'tips': ["SQ"], 'mv': 'http://music.163.com/#/mv?id=330033'
+    },
+    
+    {
+      'name': '何度も', 'detail': 'RAM WIRE',
+      'link': 'https://music.163.com/song/media/outer/url?id=26349198.mp3', 'icon': 'https://p1.music.126.net/xcY5eGr6hhIj5q_c-s78Kw==/2306775395131226.jpg?param=130y130',
+      'tips': [], 'mv': 'http://music.163.com/#/mv?id=158039'
+    },
+
+    {
+      'name': '猫耳开关 - 翻唱', 'detail': 'Hanser',
+      'link': 'https://music.163.com/song/media/outer/url?id=34880507.mp3', 'icon': 'https://p1.music.126.net/Dev8qwDRGjIxAtopFG0uxg==/3263350512830591.jpg?param=130y130',
+      'tips': [], 'mv': 'http://music.163.com/#/mv?id=158039'
+    },
+    
+    {
+      'name': 'Mine (Illenium Remix)', 'detail': 'ILLENIUM / Phoebe Ryan',
+      'link': 'https://music.163.com/song/media/outer/url?id=30780496.mp3', 'icon': 'https://p1.music.126.net/94Zjhb6ibXN9jpIjRQDbUw==/7762552092459017.jpg?param=130y130',
+      'tips': [], 'mv': 'http://music.163.com/#/mv?id=5343219'
+    }];
+
+    //初始加载
+    $(function () {
+      getMusicList();
+    })
+
+    var currentIndex = 0;
+    //加载列表
+    function getMusicList() {
+      var str = ""
+      for (e in json) {
+        var tipstr = "";
+        for (k in json[e].tips) {
+          var num = +k + 1;
+          tipstr += "<span class='little-span-" + num + "'>" + json[e].tips[k] + "</span>"
+        }
+        var mvstr = "";
+        if (json[e].mv != "") {
+          mvstr = "<span class='mvSpan' onclick=\"openMV('" + json[e].mv + "')\">MV</span>";
+        }
+        str += "<li onclick=\"play('" + json[e].name + "','" + json[e].detail + "','" + json[e].link + "','" + json[e].icon + "',this)\" class='mdui-list-item mdui-ripple music-list-wrapper'>"
+          + "<div class='mdui-list-item-content music-list-item' style='margin-left:10px;'>"
+          + "<p>" + json[e].name + ""
+          + tipstr
+          + "</p>"
+          + "<p>" + json[e].detail + "</p>"
+          + "</div>"
+          + mvstr
+          + "</li>"
+      }
+      $("#musicListUl").append(str);
+    }
+
+    //MV
+    function openMV(mv) {
+      event.stopPropagation();
+      $("#playBtn").html("&#xe039;");
+      $("audio")[0].pause();
+      clearInterval(playInterval);
+      $(".mdui-video-fluid")[0].src = mv;
+      $("video")[0].ondurationchange = function () {
+        setTimeout(function () {
+          var inst = new mdui.Dialog('#music-MV');
+          inst.open();
+        }, 1200);
+      }
+
+      var dialog = document.getElementById('music-MV');
+      dialog.addEventListener('close.mdui.dialog', function () {
+        $(".mdui-video-fluid")[0].src = "";
+      });
+    }
+    //获取进度条
+    var playInterval;
+    function getDuration() {
+      $("#changeProgress").fadeIn(3800);
+      playInterval = setInterval(function () {
+        var widthDuration = $("audio")[0].currentTime / $("audio")[0].duration * 100;
+        //$(".mini-progress").css("width", widthDuration);
+        $(".mini-progress").val(widthDuration);
+        mdui.updateSliders();
+        if (widthDuration == "100") {
+          var currentIndex = getCurrentIndex() + 1;
+          if (currentIndex == $("#musicListUl li").length) {
+            currentIndex = 0;
+          }
+          $("#musicListUl li").eq(currentIndex).click();
+        }
+      }, 1000);
+    }
+
+    //快进快退
+    function changeProgress() {
+      $("#playBtn").hide();
+      $("#play-spinner").fadeIn();
+
+      $("audio")[0].currentTime = $(".mini-progress").val() / 100 * $("audio")[0].duration;
+      if ($("audio")[0].paused) {
+        playBtn();
+        
+      }
+      setTimeout(function(){
+        $("#play-spinner").hide();
+        $("#playBtn").fadeIn();
+      
+      },2000);
+    }
+
+    //上一首下一首
+    function PrevAndNext(e) {
+      $("#changeProgress").hide();
+      var currentIndex = getCurrentIndex() + e;
+      if (currentIndex == $("#musicListUl li").length) {
+        currentIndex = 0;
+      }
+      $("#musicListUl li").eq(currentIndex).click();
+      $("audio")[0].currentTime = 0;
+    }
+
+    //列表点击
+    function play(name, detail, link, icon, e) {
+      $("#changeProgress").hide();
+      $(".music-ul li").removeClass("playList-active");
+      $(e).addClass("playList-active");
+      if ($("audio")[0].src == link && $("audio")[0].paused) { //点击列表时若是当前歌曲 且 暂停状态 => 播放
+        playBtn();
+      } else if ($("audio")[0].src == link && !$("audio")[0].paused) { //点击列表时若是当前歌曲 且 播放状态 => return false;
+        $("#changeProgress").show();
+        return false;
+      } else {  //点击列表时若不是当前歌曲 => 切换成当前点击的歌
+        $("#play-spinner").show();
+        $("#playBtn").hide();
+        $("#musicPlayer-name").text(name);
+        $("#musicPlayer-detail").text(detail);
+        $("#musicPlayer-icon")[0].src = icon;
+
+        $("audio")[0].src = link;//路径
+        $("audio")[0].ondurationchange = function () {
+          $("#play-spinner").hide();
+          $("#playBtn").fadeIn();
+          playBtn();
+          $("#player-wrapper").slideDown(200);
+        };
+      }
+    }
+
+    //播放暂停
+    function playBtn() {
+      if ($("audio")[0].paused) {
+        // 暂停>播放
+        $("#playBtn").html("&#xe036;");
+        $("audio")[0].play();
+        if ($("audio")[0].paused) {
+          $("#playBtn").html("&#xe039;");
+        }
+        getDuration();
+      } else {
+        // 播放>暂停
+        $("#playBtn").html("&#xe039;");
+        $("audio")[0].pause();
+        clearInterval(playInterval);
+      }
+    }
+
+    //调节音量
+    function changeVolume() {
+      $("audio")[0].volume = $("#changeVolume").val() / 100;
+    }
+
+    //获取现在播放的index
+    function getCurrentIndex() {
+      return $(".playList-active").index();
+    }
+
+  </script>
+</body>
+
+</html>
