@@ -1,0 +1,215 @@
+@font-face {
+    font-family: 'iconfont';
+    src: url('../fonts/iconfont.eot');
+    src: url('../fonts/iconfont.eot?#iefix') format('embedded-opentype'),
+        url('../fonts/iconfont.woff2') format('woff2'),
+        url('../fonts/iconfont.woff') format('woff'),
+        url('../fonts/iconfont.ttf') format('truetype'),
+        url('../fonts/iconfont.svg#iconfont') format('svg');
+  }
+.iconfont {
+    font-family: "iconfont" !important;
+    font-size: 16px;
+    font-style: normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+* {
+    margin: 0;
+    padding: 0;
+    vertical-align: middle;
+    box-sizing: border-box;
+}
+body {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-size: 14px;
+    color: rgba(255, 255, 255, .3);
+    background: #112234;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+ul li {
+    list-style: none;
+}
+
+.container {
+    width: 300px;
+    height: 400px;
+    border-radius: 14px;
+    box-shadow: inset 0 0 5px rgba(255, 255, 255, .5),
+                inset 0 0 6px rgba(255, 255, 255, .5),
+                0 0 5px rgba(255, 255, 255, .5),
+                0 0 6px rgba(255, 255, 255, .5);
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all .5s;
+}
+.container:hover {
+    box-shadow: inset 0 0 5px rgba(25, 145, 89, 0.5),
+                inset 0 0 6px rgba(25, 145, 89, 0.5),
+                0 0 5px rgba(25, 145, 89, 0.5),
+                0 0 5px rgba(25, 145, 89, 0.5);
+}
+.cal-box {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.cal-result {
+    width: 100%;
+    height: 50px;
+}
+.cal-result input[type="text"] {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    outline: none;
+    border: none;
+    background-color: rgba(255, 255, 255, 0.164);
+    text-align: right;
+    padding: 0 10px;
+    border:2px transparent solid;
+    background: 0;
+    border-image: linear-gradient(to right,#0f44c9,#23b7cb) 1 10;;
+    /* box-shadow: inset 0 0 5px rgba(255, 255, 255, .5),
+                inset 0 0 6px rgba(255, 255, 255, .5),
+                0 0 5px rgba(255, 255, 255, .5),
+                0 0 6px rgba(255, 255, 255, .5); */
+                
+    font-size: 16px;
+}
+.cal-result input[type="text"]::placeholder {
+    color: rgba(255, 255, 255, .3);
+}
+.cal-select-algorithm {
+    width: 100%;
+    height: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.cal-select-algorithm span {
+    margin-top: 30px;
+    width: 60px;
+    height: 100%;
+    text-align: center;
+    line-height: 40px;
+    box-shadow: inset 0 0 5px rgba(255, 255, 255, .5),
+                inset 0 0 6px rgba(255, 255, 255, .5),
+                0 0 5px rgba(255, 255, 255, .5),
+                0 0 6px rgba(255, 255, 255, .5);
+    border-radius: 24px;
+    transition: all .3s;
+    font-size: 0;
+}
+.cal-select-algorithm .addtion::after {
+    display: block;
+    width: 100%;
+    height: 100%;
+    content: '\e61e';
+    font-family: "iconfont";
+    font-size: 30px;
+    color:rgba(255, 255, 255, .3);
+}
+.addtion:hover {
+    background-color: rgba(255, 255, 255, .6);
+}
+.cal-select-algorithm .subtraction::after {
+    display: block;
+    width: 100%;
+    height: 100%;
+    content: '\e61d';
+    font-family: "iconfont";
+    font-size: 30px;
+    color:rgba(255, 255, 255, .3);
+}
+.subtraction:hover {
+    background-color: rgba(255, 255, 255, .6);
+}
+.cal-select-algorithm .multiplication::after {
+    display: block;
+    width: 100%;
+    height: 100%;
+    content: '\e61f';
+    font-family: "iconfont";
+    font-size: 30px;
+    color:rgba(255, 255, 255, .3);
+}
+.multiplication:hover {
+    background-color: rgba(255, 255, 255, .6);
+}
+.cal-select-algorithm .divstion::after {
+    display: block;
+    width: 100%;
+    height: 100%;
+    content: '\e61c';
+    font-family: "iconfont";
+    font-size: 30px;
+    color:rgba(255, 255, 255, .3);
+}
+.divstion:hover {
+    background-color: rgba(255, 255, 255, .6);
+}
+
+.cal-number-btn {
+    width: 100%;
+    height: 100%;
+    margin-top: 30px;
+}
+.cal-number-btn ul {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+}
+.cal-number-btn ul li {
+    width: 80px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 40px;
+    box-shadow: inset 0 0 5px rgba(255, 255, 255, .5),
+                inset 0 0 6px rgba(255, 255, 255, .5),
+                0 0 5px rgba(255, 255, 255, .5),
+                0 0 6px rgba(255, 255, 255, .5);
+    border-radius: 10px;
+    transition: all .3s;
+}
+.cal-number-btn ul .empty-btn, .cal-number-btn ul .entry-btn {
+    box-shadow: none;
+}
+.empty-btn::after {
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    content: '\e602';
+    font-family: "iconfont";
+}
+.entry-btn::after {
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    content: '\e69c';
+    font-family: "iconfont";
+}
+.cal-number-btn ul li:hover {
+    color: #569875;
+    box-shadow: inset 0 0 5px rgba(121, 31, 106, 0.5),
+                inset 0 0 6px rgba(121, 31, 106, 0.5),
+                0 0 5px rgba(121, 31, 106, 0.5),
+                0 0 5px rgba(121, 31, 106, 0.5);
+}
+.cal-number-btn ul .empty-btn:hover, .cal-number-btn ul .entry-btn:hover {
+    box-shadow: none;
+}
